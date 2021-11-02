@@ -1,10 +1,10 @@
 import logo from './logo.svg';
 import './App.css';
 
-const Hello = () => {
+const Hello = (props) => {
   return (
     <div>
-      <p>Hello world</p>
+      <p>Hello {props.name}</p>
     </div>
   )
 }
@@ -13,6 +13,8 @@ const App = () => {
   return (
     <div>
       <h1>Greetings</h1>
+      <Hello name='george' />
+      <Hello name="daisy" />
       <Hello />
     </div>
   )
