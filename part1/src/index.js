@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+// StrictMode is a tool for highlighting potential problems in an application. 
 ReactDOM.render(
   <React.StrictMode>
     <App />
