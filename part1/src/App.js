@@ -1,21 +1,39 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
 
-const Hello = (props) => {
+const History = (props) => {
+  if (props.allClicks.length === 0) {
+    return (
+      <div>
+        the app is used by pressing the buttons
+      </div>
+    )
+  }
+
   return (
     <div>
-      <p>Hello {props.name}</p>
+      button press history: {props.allClicks.join(' ')}
     </div>
   )
 }
 
+const Button = ({ handleClick, text }) => (
+  <button onClick={handleClick}>
+    {text}
+  </button>
+)
+
 const App = () => {
+  const [value, setValue] = useState(10);
+  
+  const setToValue = (newValue) => () => setValue(newValue);
+  
   return (
     <div>
-      <h1>Greetings</h1>
-      <Hello name='george' />
-      <Hello name="daisy" />
-      <Hello />
+      {value}
+      <button onClick={setToValue(1000)}>thousand</button>
+      <button onClick={setToValue(0)}>reset</button>
+      <button onClick={setToValue(value + 1)}>increment</button>
     </div>
   )
 }
