@@ -6,6 +6,8 @@ const Button = props => (
   <button onClick={props.handleClick}>{props.text}</button>
 )
 
+const Display = props => <div>{props.text}: {props.value}</div>
+
 const Statistics = props => {
   const [good, neutral, bad] = props.values
   //console.log(props.values)
@@ -26,7 +28,7 @@ const Statistics = props => {
     </div>)
 }
 
-const Display = props => <div>{props.text}: {props.value}</div>
+
 
 const App = () => {
   // save clicks of each button to its own state
