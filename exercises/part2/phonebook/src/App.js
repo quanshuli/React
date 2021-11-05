@@ -16,7 +16,7 @@ const App = () => {
         );
 
   const addPerson = (event) => {
-    event.preventDefault();
+    event.preventDefault(); // prevent page reload
     if (persons.find((person) => person.name === newName)) {
       alert(`${newName} already exists!`);
     } else {
