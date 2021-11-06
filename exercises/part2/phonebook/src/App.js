@@ -1,86 +1,93 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: "Arto Hellas", number: 123, id: 1 },
-  ]);
-  const [newName, setNewName] = useState("");
-  const [newNumber, setNewNumber] = useState("");
-  const [showPerson, setShowPerson] = useState("");
+  const [countries, setCountries] = useState([]);
+  const [showCountry, setShowCountry] = useState("");
+  const [isClick, setIsClick] = useState(false);
+  const [country, setCountry] = useState([]);
 
-  const personToShow =
-    showPerson === ""
-      ? persons
-      : persons.filter((person) =>
-          person.name.toLowerCase().startsWith(showPerson.toLowerCase())
+  console.log("countries", countries);
+
+  const handleShowCountry = (event) => {
+    setShowCountry(event.target.value);
+  };
+
+  const countryToShow =
+    showCountry === ""
+      ? countries
+      : countries.filter((country) =>
+          country.name.common.toLowerCase().includes(showCountry.toLowerCase())
         );
 
-  const addPerson = (event) => {
-    event.preventDefault(); // prevent page reload
-    if (persons.find((person) => person.name === newName)) {
-      alert(`${newName} already exists!`);
-    } else {
-      const personObject = {
-        name: newName,
-        number: newNumber,
-        id: persons.length + 1,
-      };
+  console.log(countries);
+  //console.log(countryToShow);
 
-      setPersons(persons.concat(personObject));
-      setNewName("");
-      setNewNumber("");
+  const Countries = ({ countries }) => {
+    //return <p>{countries.length}</p>;
+    console.log(countries.length);
+    if (countries.length > 10) {
+      return <p>Too many countries.</p>;
+    } else if (countries.length > 1) {
+      return countries.map((country) => (
+        <li>
+          {country.name.common}{" "}
+          <ShowButton handleClick={handleClick(country)} />
+        </li>
+      ));
+    } else if (countries.length === 1) {
+      console.log("one", countries);
+      return countries.map((country) => <Country country={country} />);
+    } else {
+      return <p>loading</p>;
     }
   };
 
-  const addName = (event) => {
-    console.log(event.target.value);
-    setNewName(event.target.value);
+  const Country = ({ country }) => (
+    <div>
+      <h1>{country.name.common}</h1>
+      <p>capital {country.capital}</p>
+      <p>population {country.population}</p>
+      <h2>Spoken languages</h2>
+      <ul>
+        {Object.keys(country.languages).map((key) => (
+          <li>{country.languages[key]}</li>
+        ))}
+      </ul>
+      <figure>{country.flag}</figure>
+      <h2>Weather in {country.capital}</h2>
+      <p>in progress...</p>
+    </div>
+  );
+
+  const handleClick = (country) => () => {
+    console.log("country", country);
+    setIsClick(true);
+    setCountry(country);
   };
 
-  const addNumber = (event) => {
-    console.log(event.target.value);
-    setNewNumber(event.target.value);
+  const ShowButton = (props) => (
+    <button onClick={props.handleClick}>show</button>
+  );
+
+  const hook = () => {
+    axios.get("https://restcountries.com/v3.1/all").then((response) => {
+      setCountries(response.data);
+      console.log("promise fulfilled");
+    });
   };
 
-  const showPersonHandler = (event) => {
-    setShowPerson(event.target.value);
-  };
+  useEffect(hook, []);
 
-  const Person = ({ person }) => {
-    return (
-      <li>
-        {person.name} {person.number}
-      </li>
-    );
-  };
-
-  console.log(persons);
   return (
     <div>
-      <h2>Phonebook</h2>
       <p>
-        filter shown with
-        <input value={showPerson} onChange={showPersonHandler} />
+        find countries
+        <input value={showCountry} onChange={handleShowCountry} />
       </p>
 
-      <h2>add a new</h2>
-      <form onSubmit={addPerson}>
-        <div>
-          name: <input value={newName} onChange={addName} />
-        </div>
-        <div>
-          number: <input value={newNumber} onChange={addNumber} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
-      <div>debug:{newName}</div>
-
-      <h2>Numbers</h2>
-      {personToShow.map((person) => (
-        <Person key={person.id} person={person} />
-      ))}
+      <Countries countries={countryToShow} />
+      {isClick && <Country country={country} />}
     </div>
   );
 };
