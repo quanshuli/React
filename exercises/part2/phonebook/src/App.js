@@ -1,18 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import personServices from "./services/Persons";
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: "Arto Hellas", number: 123, id: 1 },
-  ]);
+  const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [showPerson, setShowPerson] = useState("");
+
+  const hook = () => {
+    console.log("effect");
+    personServices.getAll().then((initialPersons) => {
+      setPersons(initialPersons);
+    });
+  };
+
+  useEffect(hook, []);
 
   const personToShow =
     showPerson === ""
       ? persons
       : persons.filter((person) =>
-          person.name.toLowerCase().startsWith(showPerson.toLowerCase())
+          person.name.toLowerCase().includes(showPerson.toLowerCase())
         );
 
   const addPerson = (event) => {
@@ -26,9 +34,11 @@ const App = () => {
         id: persons.length + 1,
       };
 
-      setPersons(persons.concat(personObject));
-      setNewName("");
-      setNewNumber("");
+      personServices.create(personObject).then((returnedPerson) => {
+        setPersons(persons.concat(returnedPerson));
+        setNewName("");
+        setNewNumber("");
+      });
     }
   };
 
