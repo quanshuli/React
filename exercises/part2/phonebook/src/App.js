@@ -32,10 +32,12 @@ const App = () => {
       console.log("here", id);
       updateNumber(id);
     } else {
+      const ids = persons.map((person) => person.id);
+
       const personObject = {
         name: newName,
         number: newNumber,
-        id: persons.length + 1,
+        id: Math.max(...ids) + 1,
       };
 
       personServices.create(personObject).then((returnedPerson) => {
