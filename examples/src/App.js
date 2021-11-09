@@ -56,7 +56,7 @@ const App = () => {
     /* If the promise is fulfilled, the first argument of then() will be called; 
       if the promise is rejected, the second argument will be called. */
     // version 1
-    //noteService.update(id, changedNote).then((response) => {
+    // noteService.update(id, changedNote).then((response) => {
     //  setNotes(notes.map((note) => (note.id !== id ? note : response.data)));
     // version 2
     noteService

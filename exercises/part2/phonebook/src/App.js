@@ -8,7 +8,7 @@ const App = () => {
   const [showPerson, setShowPerson] = useState("");
 
   const hook = () => {
-    console.log("effect");
+    //console.log("effect");
     personServices.getAll().then((initialPersons) => {
       setPersons(initialPersons);
     });
@@ -26,7 +26,11 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault(); // prevent page reload
     if (persons.find((person) => person.name === newName)) {
-      alert(`${newName} already exists!`);
+      //alert(`${newName} already exists!`);
+      const person = persons.filter((person) => person.name === newName);
+      const id = person[0].id;
+      console.log("here", id);
+      updateNumber(id);
     } else {
       const personObject = {
         name: newName,
@@ -43,28 +47,56 @@ const App = () => {
   };
 
   const addName = (event) => {
-    console.log(event.target.value);
+    //console.log(event.target.value);
     setNewName(event.target.value);
   };
 
   const addNumber = (event) => {
-    console.log(event.target.value);
+    //console.log(event.target.value);
     setNewNumber(event.target.value);
+  };
+
+  const updateNumber = (id) => {
+    const person = persons.find((n) => n.id === id);
+    if (window.confirm(`${person.name} already exist, update the number?`)) {
+      const updatedPerson = { ...person, number: newNumber };
+      personServices
+        .update(id, updatedPerson)
+        .then((returnedPerson) =>
+          setPersons(
+            persons.map((person) =>
+              person.name === newName ? returnedPerson : person
+            )
+          )
+        );
+    }
   };
 
   const showPersonHandler = (event) => {
     setShowPerson(event.target.value);
   };
 
-  const Person = ({ person }) => {
+  const handelDeleteOf = (id) => {
+    //console.log("here", id);
+    const person = persons.find((p) => p.id === id);
+    //alert(`do you really want to delete ${person.name}`);
+    if (window.confirm(`do you really want to delete ${person.name}`)) {
+      personServices
+        .deletePerson(id)
+        .then(setPersons(persons.filter((p) => p.id !== id)));
+    }
+  };
+
+  const Person = ({ person, handelDelete }) => {
     return (
       <li>
-        {person.name} {person.number}
+        {person.name} {person.number}{" "}
+        <button onClick={handelDelete}>delete</button>
       </li>
     );
   };
 
-  console.log(persons);
+  //console.log(persons);
   return (
     <div>
       <h2>Phonebook</h2>
@@ -89,7 +121,11 @@ const App = () => {
 
       <h2>Numbers</h2>
       {personToShow.map((person) => (
-        <Person key={person.id} person={person} />
+        <Person
+          key={person.id}
+          person={person}
+          handelDelete={() => handelDeleteOf(person.id)}
+        />
       ))}
     </div>
   );
