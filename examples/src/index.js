@@ -16,4 +16,4 @@ axios.get("http://localhost:3001/notes").then((response) => {
 });
 */
 
-ReactDOM.render(<App />, document.getElementById("root"));
+//ReactDOM.render(<App />, document.getElementById("root"));
