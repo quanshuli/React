@@ -1,19 +1,18 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { createStore } from "redux";
+import { Provider } from "react-redux";
 import App from "./App.js";
-import axios from "axios";
+import noteReducer from "./reducers/noteReducer";
 
-/*
-const promise = axios.get("http://localhost:3001/notes");
-promise.then((response) => {
-  console.log(response);
-});
+const store = createStore(
+  noteReducer,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
 
-
-axios.get("http://localhost:3001/notes").then((response) => {
-  const notes = response.data;
-  ReactDOM.render(<App notes={notes} />, document.getElementById("root"));
-});
-*/
-
-//ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById("root")
+);
