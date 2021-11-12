@@ -27,14 +27,16 @@ const reducer = (state = initialState, action) => {
     case "VOTE": {
       const id = action.data.id;
       const voteToChange = state.find((v) => v.id === id);
-      console.log(voteToChange);
+
       const changedVote = {
         ...voteToChange,
         votes: voteToChange.votes + 1,
       };
-      console.log(changedVote);
+
       return state.map((vote) => (vote.id !== id ? vote : changedVote));
     }
+    case "NEW_VOTE":
+      return state.concat(action.data);
     default:
       return state;
   }
@@ -44,6 +46,17 @@ export const handleVote = (id) => {
   return {
     type: "VOTE",
     data: { id },
+  };
+};
+
+export const newAnec = (content) => {
+  return {
+    type: "NEW_VOTE",
+    data: {
+      content,
+      id: getId(),
+      votes: 0,
+    },
   };
 };
 
