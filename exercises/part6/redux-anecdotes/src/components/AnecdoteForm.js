@@ -1,37 +1,27 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { handleVote, newAnec } from "../reducers/anecdoteReducer";
+import { useDispatch } from "react-redux";
+import { newAnec } from "../reducers/anecdoteReducer";
 
-const Anecdote = ({ anecdote, handleClick }) => {
-  return (
-    <div>
-      <div>{anecdote.content}</div>
-      <div>
-        has {anecdote.votes}
-        <button onClick={handleClick}>vote</button>
-      </div>
-    </div>
-  );
-};
-
-const Anecdotes = () => {
-  const anecdotes = useSelector((state) =>
-    [...state].sort((a, b) => b.votes - a.votes)
-  );
+const AnecdoteForm = () => {
   const dispatch = useDispatch();
+  const addAnecdote = (event) => {
+    event.preventDefault();
+    const content = event.target.anec.value;
+    event.target.anec.value = "";
+    dispatch(newAnec(content));
+  };
 
   return (
     <div>
-      <h1>Anecdotes</h1>
-      {anecdotes.map((anecdote) => (
-        <Anecdote
-          key={anecdote.id}
-          anecdote={anecdote}
-          handleClick={() => dispatch(handleVote(anecdote.id))}
-        />
-      ))}
+      <h2>create new</h2>
+      <form onSubmit={addAnecdote}>
+        <div>
+          <input name="anec" />
+        </div>
+        <button type="submit">create</button>
+      </form>
     </div>
   );
 };
 
-export default Anecdotes;
+export default AnecdoteForm;
