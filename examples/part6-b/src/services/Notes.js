@@ -16,6 +16,8 @@ const Note = ({ note, handleClick }) => {
 const Notes = () => {
   const dispatch = useDispatch();
   const notes = useSelector(({ filter, notes }) => {
+    console.log("notes unpack", notes);
+    console.log("filter unpack", filter);
     if (filter === "ALL") {
       return notes;
     }
@@ -26,7 +28,7 @@ const Notes = () => {
   console.log("notes.js", notes);
   return (
     <ul>
-      {notes.notes.map((note) => (
+      {notes.map((note) => (
         <Note
           key={note.id}
           note={note}

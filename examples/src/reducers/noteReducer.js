@@ -16,27 +16,24 @@ const initialState = {
   filter: "IMPORTANT",
 };
 
-const noteReducer = (state = initialState, action) => {
+const noteReducer = (state = initialState.notes, action) => {
   switch (action.type) {
     case "NEW_NOTE":
       console.log("state", state);
       console.log("state.notes", state.notes);
       //console.log(state.notes.concat(action.data));
       // state.push(action.data); // change original data, bad
-      // return state.notes.concat(action.data); // or [...state, action.data]
-      return { ...state, notes: state.notes.concat(action.data) };
+      return state.concat(action.data); // or [...state, action.data]
+    //return { ...state, notes: state.notes.concat(action.data) };
 
     case "TOGGLE_IMPORTANCE": {
       const id = action.data.id;
-      const noteToChange = state.notes.find((n) => n.id === id);
+      const noteToChange = state.find((n) => n.id === id);
       const changedNote = {
         ...noteToChange,
         important: !noteToChange.important,
       };
-      return {
-        ...state,
-        notes: state.notes.map((note) => (note.id !== id ? note : changedNote)),
-      };
+      return state.map((note) => (note.id !== id ? note : changedNote));
     }
     default:
       return state;
