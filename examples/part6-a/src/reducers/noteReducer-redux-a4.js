@@ -1,30 +1,10 @@
 import React from "react";
 
-const initialState = {
-  notes: [
-    {
-      content: "reducer defines how redux store works",
-      important: true,
-      id: 1,
-    },
-    {
-      content: "state of store can contain any data",
-      important: false,
-      id: 2,
-    },
-  ],
-  filter: "IMPORTANT",
-};
-
-const noteReducer = (state = initialState, action) => {
+const noteReducer = (state = [], action) => {
   switch (action.type) {
     case "NEW_NOTE":
-      console.log("state", state);
-      console.log("state.notes", state.notes);
-      //console.log(state.notes.concat(action.data));
       // state.push(action.data); // change original data, bad
-      // return state.notes.concat(action.data); // or [...state, action.data]
-      return { ...state, notes: state.notes.concat(action.data) };
+      return state.concat(action.data); // or [...state, action.data]
 
     case "TOGGLE_IMPORTANCE": {
       const id = action.data.id;
