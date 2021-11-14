@@ -9,9 +9,9 @@ const NewNote = (props) => {
     event.preventDefault();
     const content = event.target.note.value;
     event.target.note.value = "";
-    console.log(content);
-    const newNote = await noteService.createNew(content);
-    dispatch(createNote(newNote));
+    //console.log(content);
+    //const newNote = await noteService.createNew(content);
+    dispatch(createNote(content));
   };
 
   return (
